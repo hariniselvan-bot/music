@@ -787,6 +787,53 @@ body.bg-inner::before{
 }
 </style>
 
+
+<style id="mobile-header-sticky-override">
+@media (max-width:900px){
+  /* Force the mobile header to stay fixed at the top while the page scrolls. */
+  html, body{
+    overflow-x:hidden !important;
+  }
+
+  .site-header{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    height:80px !important;
+    min-height:80px !important;
+    z-index:30000 !important;
+    background:rgba(5,5,9,.96) !important;
+    backdrop-filter:blur(16px) saturate(120%) !important;
+    -webkit-backdrop-filter:blur(16px) saturate(120%) !important;
+  }
+
+  /* Keep the first page section below the fixed header. */
+  body{
+    padding-top:80px !important;
+  }
+
+  /* Open mobile menu must begin directly under the fixed header. */
+  .site-header + .mobile-nav{
+    position:fixed !important;
+    top:80px !important;
+    left:0 !important;
+    right:0 !important;
+    width:100vw !important;
+    height:calc(100dvh - 80px) !important;
+    max-height:calc(100dvh - 80px) !important;
+    z-index:29999 !important;
+  }
+
+  body.menu-open{
+    overflow:hidden !important;
+    height:100vh !important;
+    overscroll-behavior:none !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-inner">
   <div class="green-grid"></div>
