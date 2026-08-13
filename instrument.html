@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Collection — Find Your Perfect Instrument</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .instrument-hero { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; padding-top: 120px; padding-bottom: 3rem; }
+    .category-section { padding: 3rem 0; position: sticky; top: 80px; z-index: 10; background: rgba(6,23,17,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(216,166,60,0.1); }
+    .category-nav { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .category-btn { padding: 0.6rem 1.5rem; border: 1px solid rgba(216,166,60,0.2); border-radius: 50px; color: var(--white); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.3s ease; background: transparent; cursor: pointer; }
+    .category-btn:hover, .category-btn.active { background: var(--gold); color: var(--primary); border-color: var(--gold); }
+    .instrument-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 4rem 0; }
+    .instrument-card { position: relative; height: 400px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(216,166,60,0.08); background: rgba(16,10,24,0.5); transition: all 0.5s ease; opacity: 0; transform: translateY(30px); }
+    .instrument-card.visible { opacity: 1; transform: translateY(0); }
+    .instrument-card:hover { border-color: rgba(216,166,60,0.3); transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .instrument-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .instrument-card:hover img { transform: scale(1.08); }
+    .instrument-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(5,5,10,0.95) 100%); z-index: 1; }
+    .instrument-card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; z-index: 2; }
+    .instrument-card-tag { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .instrument-card h3 { font-size: 1.4rem; color: var(--white); margin-bottom: 0.75rem; }
+    .instrument-card p { font-size: 0.85rem; color: rgba(245,242,234,0.5); line-height: 1.6; margin-bottom: 1.25rem; }
+    .instrument-card-price { font-size: 1.2rem; color: var(--gold); font-family: var(--font-serif); }
+    .featured-instrument { padding: 5rem 0; background: rgba(6,23,17,0.5); }
+    .featured-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .featured-image { height: 500px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(216,166,60,0.1); position: relative; }
+    .featured-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+    .featured-image:hover img { transform: scale(1.05); }
+    .comparison-section { padding: 5rem 0; }
+    .comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .comparison-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(216,166,60,0.08); border-radius: 20px; padding: 2.5rem; text-align: center; transition: all 0.4s ease; }
+    .comparison-card:hover { border-color: rgba(216,166,60,0.25); transform: translateY(-5px); }
+    .comparison-card h3 { font-size: 1.3rem; color: var(--white); margin-bottom: 1rem; }
+    .comparison-card .price { font-size: 2rem; color: var(--gold); font-family: var(--font-serif); margin-bottom: 1.5rem; }
+    .comparison-card ul { text-align: left; margin-bottom: 2rem; }
+    .comparison-card li { color: rgba(245,242,234,0.6); font-size: 0.9rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(216,166,60,0.05); display: flex; align-items: center; gap: 0.5rem; }
+    .comparison-card li::before { content: '✓'; color: var(--gold); }
+    .gallery-section { padding: 5rem 0; }
+    .particle-section { padding: 8rem 0; text-align: center; position: relative; overflow: hidden; }
+    .particle-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(75,21,95,0.15) 0%, transparent 70%); }
+    @media (max-width: 1024px) { .instrument-grid { grid-template-columns: repeat(2, 1fr); } .featured-grid { grid-template-columns: 1fr; } .comparison-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .instrument-grid { grid-template-columns: 1fr; } }
+  </style>
+
+<style id="instrument-premium-gold-theme">
+:root{
+  --instrument-gold:#d8a63c;
+  --instrument-light:#f2c45f;
+}
+
+/* ===== SOFT GOLD ATMOSPHERE ===== */
+body.bg-inner{
+  background:
+    radial-gradient(circle at 50% 4%,rgba(216,166,60,.16),transparent 27%),
+    radial-gradient(circle at 10% 35%,rgba(216,166,60,.07),transparent 25%),
+    radial-gradient(circle at 90% 70%,rgba(216,166,60,.06),transparent 28%),
+    linear-gradient(135deg,#050504 0%,#0b0905 48%,#050504 100%) !important;
+  overflow-x:hidden;
+}
+body.bg-inner::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-5;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(216,166,60,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(216,166,60,.09) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:linear-gradient(to bottom,black,transparent 92%);
+}
+.green-grid{opacity:.07 !important}
+
+/* ===== STICKY HEADER ===== */
+.site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:9999 !important;
+  background:rgba(7,7,6,.84) !important;
+  backdrop-filter:blur(16px) saturate(120%) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(120%) !important;
+  border-bottom:1px solid rgba(216,166,60,.18) !important;
+  box-shadow:0 8px 30px rgba(0,0,0,.2) !important;
+}
+.site-header .brand-logo{
+  border-color:#d8a63c !important;
+  box-shadow:0 0 22px rgba(216,166,60,.08);
+}
+
+.site-header .brand-text h1{color:#f5f2ea !important}
+.site-header .brand-text span{color:#d8a63c !important}
+.site-header .desktop-nav a.active,
+.site-header .desktop-nav a:hover{color:#d8a63c !important}
+.site-header .desktop-nav a.active::after{background:#d8a63c !important}
+.site-header .login-btn{
+  border-color:#d8a63c !important;
+  color:#d8a63c !important;
+}
+
+/* ===== HERO ===== */
+.instrument-hero{
+  min-height:78vh !important;
+  padding:145px 20px 105px !important;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(216,166,60,.14),transparent 34%),
+    linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.28));
+}
+.instrument-hero::before{
+  content:"";
+  position:absolute;
+  width:620px;height:620px;
+  left:50%;top:53%;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(216,166,60,.15);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 55px rgba(216,166,60,.025),
+    0 0 0 110px rgba(216,166,60,.017);
+  z-index:-1;
+}
+.instrument-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  opacity:.42;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 31px,rgba(216,166,60,.045) 32px 33px),
+    linear-gradient(90deg,transparent 0 12%,rgba(216,166,60,.04) 12.1% 12.2%,transparent 12.3% 87.7%,rgba(216,166,60,.04) 87.8% 87.9%,transparent 88%);
+  mask-image:linear-gradient(to bottom,black,transparent 82%);
+}
+.instrument-hero .container{position:relative;z-index:3}
+.instrument-hero .section-label{
+  color:#f2c45f !important;
+  letter-spacing:.34em !important;
+}
+.instrument-hero h1{
+  font-size:clamp(3.3rem,8vw,7rem) !important;
+  line-height:.94 !important;
+  letter-spacing:-.055em !important;
+  margin:1.1rem 0 1.3rem !important;
+  text-shadow:0 15px 55px rgba(0,0,0,.65);
+}
+.instrument-hero h1 span{
+  background:linear-gradient(135deg,#d8a63c,#f2c45f,#b77e20) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+}
+.instrument-hero p{
+  font-size:clamp(1rem,2vw,1.3rem) !important;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:rgba(245,242,234,.72) !important;
+}
+
+/* Musical SVG */
+.instrument-music{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+.instrument-music .staff{
+  fill:none;
+  stroke:rgba(216,166,60,.18);
+  stroke-width:1;
+  stroke-dasharray:8 14;
+  animation:instrumentStaff 18s linear infinite;
+}
+.instrument-music .wave{
+  fill:none;
+  stroke:rgba(242,196,95,.34);
+  stroke-width:1.5;
+  stroke-linecap:round;
+  stroke-dasharray:3 10;
+  animation:instrumentWave 10s linear infinite;
+}
+.instrument-music .note{
+  fill:rgba(242,196,95,.72);
+  filter:drop-shadow(0 0 10px rgba(216,166,60,.3));
+  animation:instrumentNote 6s ease-in-out infinite;
+}
+.instrument-music .note:nth-of-type(2){animation-delay:-2s}
+.instrument-music .note:nth-of-type(3){animation-delay:-4s}
+.instrument-music .note:nth-of-type(4){animation-delay:-1s}
+@keyframes instrumentStaff{to{stroke-dashoffset:-220}}
+@keyframes instrumentWave{to{stroke-dashoffset:-260}}
+@keyframes instrumentNote{
+  0%,100%{transform:translateY(9px) rotate(-4deg);opacity:.42}
+  50%{transform:translateY(-18px) rotate(5deg);opacity:.92}
+}
+
+/* ===== CATEGORY BAR ===== */
+.category-section{position:relative !important;top:auto !important;z-index:2 !important;
+  background:rgba(8,7,5,.86) !important;
+  border-bottom:1px solid rgba(216,166,60,.16) !important;
+  backdrop-filter:blur(18px) !important;
+}
+.category-btn{
+  border-color:rgba(216,166,60,.22) !important;
+}
+.category-btn:hover,
+.category-btn.active{
+  background:#d8a63c !important;
+  color:#070707 !important;
+  border-color:#d8a63c !important;
+}
+
+/* ===== CARDS / SECTIONS ===== */
+.instrument-card{
+  background:rgba(10,8,5,.52) !important;
+  border-color:rgba(216,166,60,.10) !important;
+  box-shadow:0 20px 50px rgba(0,0,0,.22);
+}
+.instrument-card:hover{
+  border-color:rgba(216,166,60,.35) !important;
+  box-shadow:0 24px 60px rgba(0,0,0,.3),0 0 30px rgba(216,166,60,.06);
+}
+.instrument-card-tag,
+.instrument-card-price,
+.comparison-card .price{
+  color:#d8a63c !important;
+}
+.instrument-card h3,
+.comparison-card h3{
+  color:#f5f2ea !important;
+}
+.featured-instrument{
+  background:linear-gradient(135deg,rgba(216,166,60,.045),rgba(7,23,17,.14)) !important;
+  border-top:1px solid rgba(216,166,60,.08);
+  border-bottom:1px solid rgba(216,166,60,.08);
+}
+.featured-image,
+.comparison-card{
+  border-color:rgba(216,166,60,.12) !important;
+}
+.comparison-card:hover{
+  border-color:rgba(216,166,60,.3) !important;
+  box-shadow:0 20px 50px rgba(0,0,0,.2),0 0 25px rgba(216,166,60,.05);
+}
+.comparison-card li::before{color:#d8a63c !important}
+.particle-section::before{
+  background:radial-gradient(ellipse at center,rgba(216,166,60,.12) 0%,transparent 70%) !important;
+}
+
+/* ===== FOOTER GOLD ===== */
+.site-footer{
+  background:
+    radial-gradient(circle at 15% 0%,rgba(216,166,60,.08),transparent 28%),
+    linear-gradient(180deg,#050505,#020202) !important;
+  border-top:1px solid rgba(216,166,60,.24) !important;
+}
+.site-footer .brand-logo{
+  border-color:#d8a63c !important;
+}
+.site-footer .footer-col h4{color:#f2c45f !important}
+.site-footer .footer-col a{color:rgba(245,242,234,.72) !important}
+.site-footer .footer-col a:hover{color:#f2c45f !important}
+
+/* Mobile */
+@media(max-width:900px){
+  .site-header .desktop-nav{display:none !important}
+  .site-header .login-btn{display:none !important}
+  .site-header .hamburger{display:flex !important}
+  .instrument-hero{min-height:72vh !important;padding-top:125px !important}
+  .instrument-hero::before{width:380px;height:380px}
+  .instrument-music{opacity:.7}
+}
+@media(min-width:901px){
+  .site-header .hamburger{display:none !important}
+  .site-header .login-btn{display:flex !important}
+}
+@media(prefers-reduced-motion:reduce){
+  .instrument-music .staff,.instrument-music .wave,.instrument-music .note{animation:none !important}
+}
+</style>
+
+<style id="instrument-footer-reference">
+.site-footer{
+  background:
+    radial-gradient(circle at 14% 8%,rgba(216,166,60,.045),transparent 25%),
+    #030306 !important;
+  border-top:1px solid rgba(216,166,60,.12) !important;
+  color:#f5f2ea !important;
+}
+.site-footer .footer-grid{
+  grid-template-columns:1.2fr 1fr 1fr 1.2fr !important;
+  gap:4rem !important;
+  padding:4.5rem 0 4rem !important;
+}
+.site-footer .footer-brand p{
+  max-width:370px !important;
+  color:rgba(245,242,234,.58) !important;
+  line-height:1.65 !important;
+}
+.site-footer .footer-col h4,
+.site-footer .footer-subscribe h4{
+  color:#f2c45f !important;
+  font-family:"Playfair Display",serif !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+}
+.site-footer .footer-subscribe h4{
+  color:#f5f2ea !important;
+  text-transform:none !important;
+  letter-spacing:0 !important;
+  font-size:20px !important;
+}
+.site-footer .footer-col a{
+  color:rgba(245,242,234,.58) !important;
+  margin-bottom:14px !important;
+}
+.site-footer .footer-col a:hover{color:#f2c45f !important}
+.site-footer .footer-subscribe p{
+  color:rgba(245,242,234,.62) !important;
+  line-height:1.6 !important;
+}
+.site-footer .footer-subscribe-form{
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+}
+.site-footer .subscribe-input{
+  width:125px !important;
+  flex:1 !important;
+  height:69px !important;
+  background:#f5f3ee !important;
+  color:#222 !important;
+  border:0 !important;
+  border-radius:8px !important;
+  padding:0 20px !important;
+  font-size:15px !important;
+}
+.site-footer .subscribe-button{
+  width:160px !important;
+  height:69px !important;
+  background:#f0a000 !important;
+  color:#fff !important;
+  border:0 !important;
+  border-radius:8px !important;
+  font-weight:700 !important;
+  font-size:15px !important;
+}
+.site-footer .footer-divider{
+  border-top:1px solid rgba(245,242,234,.10) !important;
+}
+.site-footer .footer-bottom{
+  padding:38px 0 34px !important;
+  color:rgba(245,242,234,.42) !important;
+}
+.site-footer .footer-socials{
+  display:flex !important;
+  gap:14px !important;
+}
+.site-footer .footer-social{
+  width:52px !important;
+  height:52px !important;
+  min-width:52px !important;
+  border:1px solid rgba(216,166,60,.38) !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:#d8a63c !important;
+  background:rgba(216,166,60,.035) !important;
+}
+.site-footer .footer-social:hover{
+  background:#d8a63c !important;
+  color:#050505 !important;
+  transform:translateY(-3px) !important;
+}
+.site-footer .footer-social svg{
+  width:17px !important;height:17px !important;fill:currentColor !important;
+}
+.site-footer .footer-top-button{
+  background:#d8a63c !important;
+  color:#050505 !important;
+  border:0 !important;
+}
+@media(max-width:600px){
+  .site-footer .footer-grid{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:0 !important;
+    padding:42px 0 18px !important;
+  }
+  .site-footer .footer-brand{display:none !important}
+  .site-footer .footer-col h4{text-align:center !important;font-size:11px !important}
+  .site-footer .footer-subscribe{text-align:center !important;margin-top:22px !important}
+  .site-footer .footer-subscribe-form{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+  }
+  .site-footer .subscribe-input{
+    width:100% !important;height:31px !important;font-size:9px !important;
+  }
+  .site-footer .subscribe-button{
+    width:69px !important;height:28px !important;font-size:9px !important;
+  }
+  .site-footer .footer-bottom{
+    flex-direction:column !important;
+    gap:12px !important;
+    text-align:center !important;
+  }
+}
+</style>
+
+<style id="force-gold-logo">
+/* FORCE THE ACTUAL logo.webp ARTWORK TO GOLD */
+.site-header img.stackly-gold-logo,
+.site-footer img.stackly-gold-logo,
+.brand-logo img.stackly-gold-logo{
+  filter:
+    brightness(0)
+    saturate(100%)
+    invert(69%)
+    sepia(53%)
+    saturate(1020%)
+    hue-rotate(359deg)
+    brightness(97%)
+    contrast(96%) !important;
+  opacity:1 !important;
+}
+
+/* Gold circular logo frame */
+.site-header .brand-logo,
+.site-footer .brand-logo{
+  border-color:#d8a63c !important;
+  box-shadow:
+    0 0 0 1px rgba(216,166,60,.10),
+    0 0 24px rgba(216,166,60,.12) !important;
+}
+
+/* Keep STACKLY text gold/cream */
+.site-header .brand-text span,
+.site-footer .brand-text span{
+  color:#d8a63c !important;
+}
+</style>
+
+
+<style id="same-reference-footer-final">
+.reference-footer{position:relative!important;margin-top:3rem!important;background:#030306!important;border-top:1px solid rgba(216,166,60,.14)!important;overflow:hidden!important;color:#f5f2ea!important}
+.reference-footer::before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;opacity:.14!important;background-image:linear-gradient(rgba(216,166,60,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(216,166,60,.055) 1px,transparent 1px)!important;background-size:54px 54px!important;mask-image:linear-gradient(to bottom,black,transparent 78%)!important}
+.reference-footer-container{position:relative!important;z-index:2!important;max-width:1600px!important;padding-left:65px!important;padding-right:65px!important}
+.reference-top{position:absolute!important;right:0!important;top:-24px!important;width:48px!important;height:48px!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:#d8a63c!important;color:#050505!important;border:1px solid #f2c45f!important;font-size:20px!important;z-index:5!important;cursor:pointer!important}
+.reference-footer-grid{display:grid!important;grid-template-columns:1.25fr .8fr .8fr 1.15fr!important;column-gap:70px!important;align-items:start!important;padding:58px 0 72px!important}
+.reference-brand{display:flex!important;align-items:center!important;gap:13px!important;text-decoration:none!important}
+.reference-brand .brand-logo{width:58px!important;height:58px!important;min-width:58px!important;border-color:#d8a63c!important;box-shadow:0 0 24px rgba(216,166,60,.14)!important}
+.reference-brand .brand-text h1{color:#f5f2ea!important;margin:0!important;font-size:25px!important;letter-spacing:.08em!important}
+.reference-brand .brand-text span{color:#d8a63c!important}
+.reference-footer-brand p{margin:20px 0 0!important;max-width:360px!important;color:rgba(245,242,234,.58)!important;font-size:18px!important;line-height:1.6!important}
+.reference-footer-column h4{margin:0 0 28px!important;color:#e5b74e!important;font-family:"Playfair Display",serif!important;font-size:16px!important;text-transform:uppercase!important;letter-spacing:.08em!important}
+.reference-footer-column a{display:block!important;margin:0 0 18px!important;color:rgba(245,242,234,.58)!important;font-size:18px!important;text-decoration:none!important;transition:color .25s ease,transform .25s ease!important}
+.reference-footer-column a:hover{color:#e5b74e!important;transform:translateX(4px)!important}
+.reference-footer-subscribe h4{margin:0 0 8px!important;color:#f5f2ea!important;font-family:"Playfair Display",serif!important;font-size:27px!important}
+.reference-footer-subscribe p{margin:0 0 20px!important;color:rgba(245,242,234,.62)!important;font-size:18px!important;line-height:1.55!important}
+.reference-subscribe-form{display:flex!important;align-items:center!important;gap:16px!important}
+.reference-subscribe-form input{width:205px!important;height:69px!important;box-sizing:border-box!important;border:0!important;border-radius:9px!important;background:#f5f3ee!important;color:#222!important;padding:0 24px!important;font-size:17px!important;outline:none!important}
+.reference-subscribe-form button{width:180px!important;height:69px!important;border:0!important;border-radius:9px!important;background:#f0a000!important;color:#fff!important;font-size:17px!important;font-weight:700!important;cursor:pointer!important;transition:transform .25s ease,box-shadow .25s ease!important}
+.reference-subscribe-form button:hover{transform:translateY(-2px)!important;box-shadow:0 12px 30px rgba(240,160,0,.20)!important}
+.reference-footer-divider{height:1px!important;background:rgba(245,242,234,.10)!important}
+.reference-footer-bottom{min-height:120px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:25px!important}
+.reference-copy,.reference-crafted{color:rgba(245,242,234,.40)!important;font-size:15px!important}
+.reference-socials{display:flex!important;align-items:center!important;gap:14px!important}
+.reference-socials a{width:52px!important;height:52px!important;min-width:52px!important;border:1px solid rgba(216,166,60,.38)!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;color:#d8a63c!important;background:rgba(216,166,60,.035)!important;font-size:18px!important;font-weight:600!important;transition:all .25s ease!important}
+.reference-socials a:hover{background:#d8a63c!important;color:#050505!important;transform:translateY(-3px)!important}
+@media(max-width:1000px){.reference-footer-container{padding-left:35px!important;padding-right:35px!important}.reference-footer-grid{grid-template-columns:1fr 1fr!important;gap:45px 50px!important}}
+@media(max-width:600px){
+.reference-footer-container{padding-left:20px!important;padding-right:20px!important}
+.reference-footer-grid{display:flex!important;flex-direction:column!important;gap:30px!important;padding:55px 0 35px!important}
+.reference-footer-column{width:100%!important;text-align:center!important}.reference-footer-column h4{font-size:12px!important;margin-bottom:20px!important}.reference-footer-column a{font-size:13px!important;margin-bottom:12px!important}
+.reference-footer-subscribe{width:100%!important;text-align:center!important}.reference-footer-subscribe h4{font-size:20px!important}.reference-footer-subscribe p{font-size:13px!important}
+.reference-subscribe-form{flex-direction:row!important;gap:10px!important}.reference-subscribe-form input{width:auto!important;flex:1!important;height:48px!important;font-size:13px!important}.reference-subscribe-form button{width:105px!important;height:48px!important;font-size:13px!important}
+.reference-footer-bottom{flex-direction:column!important;justify-content:center!important;padding:24px 0!important;gap:15px!important;text-align:center!important}.reference-copy,.reference-crafted{font-size:11px!important}.reference-socials{gap:8px!important}.reference-socials a{width:34px!important;height:34px!important;min-width:34px!important;font-size:12px!important}
+.reference-top{width:40px!important;height:40px!important;right:8px!important;top:-20px!important;font-size:16px!important}
+}
+</style>
+
+
+<style id="hamburger-final-fix">
+/* ===== MOBILE HAMBURGER — FORCE VISIBLE ===== */
+@media (max-width: 900px){
+  .site-header{
+    position:sticky !important;
+    top:0 !important;
+    z-index:99999 !important;
+    height:80px !important;
+    min-height:80px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    padding:0 20px !important;
+    box-sizing:border-box !important;
+    background:#050509 !important;
+  }
+
+  .site-header .brand{
+    display:flex !important;
+    align-items:center !important;
+    min-width:0 !important;
+  }
+
+  .site-header .hamburger{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:relative !important;
+    z-index:100000 !important;
+    width:46px !important;
+    height:46px !important;
+    min-width:46px !important;
+    margin-left:auto !important;
+    padding:7px !important;
+    box-sizing:border-box !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:6px !important;
+    cursor:pointer !important;
+    background:transparent !important;
+    border:0 !important;
+    outline:0 !important;
+  }
+
+  .site-header .hamburger span{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    width:30px !important;
+    height:2px !important;
+    min-height:2px !important;
+    background:#d8a63c !important;
+    border-radius:2px !important;
+    margin:0 !important;
+    transform:none !important;
+    transition:transform .25s ease, opacity .2s ease !important;
+  }
+
+  .site-header .hamburger.open span:nth-child(1){
+    transform:translateY(8px) rotate(45deg) !important;
+  }
+  .site-header .hamburger.open span:nth-child(2){
+    opacity:0 !important;
+  }
+  .site-header .hamburger.open span:nth-child(3){
+    transform:translateY(-8px) rotate(-45deg) !important;
+  }
+
+  .site-header .desktop-nav,
+  .site-header .login-btn{
+    display:none !important;
+  }
+
+  .mobile-nav{
+    display:flex !important;
+    position:fixed !important;
+    top:80px !important;
+    left:0 !important;
+    width:100% !important;
+    height:calc(100dvh - 80px) !important;
+    min-height:calc(100vh - 80px) !important;
+    z-index:99998 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:58px 25px 70px !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    background:#050509 !important;
+    overflow-y:auto !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+    transform:translateY(-10px) !important;
+    transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s !important;
+  }
+
+  .mobile-nav.open{
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+    transform:translateY(0) !important;
+    transition:opacity .2s ease, transform .2s ease !important;
+  }
+
+  .mobile-nav a{
+    display:block !important;
+    width:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+    color:#f5f2ea !important;
+    background:transparent !important;
+    border:0 !important;
+    text-decoration:none !important;
+    font-family:"Playfair Display",Georgia,serif !important;
+    font-size:27px !important;
+    font-weight:400 !important;
+    line-height:1.1 !important;
+    text-align:center !important;
+    transition:color .2s ease,transform .2s ease !important;
+  }
+
+  .mobile-nav a:hover,
+  .mobile-nav a.active{
+    color:#d8a63c !important;
+    transform:translateY(-2px) !important;
+  }
+
+  .mobile-nav a[href="login.html"]{
+    width:108px !important;
+    height:70px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+    border:1px solid #d8a63c !important;
+    border-radius:999px !important;
+    color:#d8a63c !important;
+    background:rgba(216,166,60,.025) !important;
+  }
+
+  body.mobile-menu-open{
+    overflow:hidden !important;
+  }
+}
+
+@media (min-width:901px){
+  .site-header .hamburger,
+  .mobile-nav{
+    display:none !important;
+  }
+}
+</style>
+
+
+<style id="mobile-final-fix">
+/* =========================================================
+   MOBILE HEADER — one click, one toggle
+   main.js uses .active, so CSS follows .active exactly.
+   ========================================================= */
+@media (max-width:900px){
+  .site-header{
+    height:78px !important;
+    min-height:78px !important;
+    padding:0 18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    position:sticky !important;
+    top:0 !important;
+    z-index:100000 !important;
+  }
+
+  .site-header .brand{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    display:flex !important;
+    align-items:center !important;
+  }
+
+  .site-header .desktop-nav,
+  .site-header .login-btn{
+    display:none !important;
+  }
+
+  .site-header .hamburger{
+    display:flex !important;
+    flex:0 0 48px !important;
+    width:48px !important;
+    height:48px !important;
+    margin-left:auto !important;
+    padding:8px !important;
+    position:relative !important;
+    z-index:100001 !important;
+    cursor:pointer !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:6px !important;
+    background:transparent !important;
+    border:0 !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    -webkit-tap-highlight-color:transparent !important;
+  }
+
+  .site-header .hamburger span{
+    display:block !important;
+    width:30px !important;
+    height:2px !important;
+    min-height:2px !important;
+    margin:0 !important;
+    background:#d8a63c !important;
+    border-radius:2px !important;
+    transition:transform .25s ease, opacity .2s ease !important;
+  }
+  /* Keep hamburger as three lines when menu is open */
+  .site-header .hamburger.active span{
+    transform:none !important;
+    opacity:1 !important;
+  }
+
+  .mobile-nav{
+    display:flex !important;
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    top:78px !important;
+    width:100% !important;
+    height:calc(100dvh - 78px) !important;
+    min-height:calc(100vh - 78px) !important;
+    z-index:99999 !important;
+    box-sizing:border-box !important;
+    padding:42px 24px 48px !important;
+    margin:0 !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:26px !important;
+    overflow-y:auto !important;
+    background:
+      radial-gradient(circle at 50% 0%,rgba(216,166,60,.10),transparent 32%),
+      #050509 !important;
+    border-top:1px solid rgba(216,166,60,.18) !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+    transform:translateY(-12px) !important;
+    transition:opacity .22s ease, transform .22s ease, visibility 0s linear .22s !important;
+  }
+
+  .mobile-nav.open{
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+    transform:translateY(0) !important;
+    transition:opacity .22s ease, transform .22s ease !important;
+  }
+
+  .mobile-nav a{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:100% !important;
+    min-height:42px !important;
+    padding:5px 0 !important;
+    margin:0 !important;
+    color:#f5f2ea !important;
+    font-family:"Playfair Display",Georgia,serif !important;
+    font-size:24px !important;
+    line-height:1 !important;
+    text-decoration:none !important;
+  }
+
+  .mobile-nav a.active{
+    color:#d8a63c !important;
+  }
+
+  .mobile-nav a[href="login.html"]{
+    width:120px !important;
+    min-height:48px !important;
+    border:1px solid #d8a63c !important;
+    border-radius:999px !important;
+    color:#d8a63c !important;
+  }
+
+  body:has(.mobile-nav.open){
+    overflow:hidden !important;
+  }
+
+  /* =========================================================
+     COLLECTION GALLERY — designed for narrow screens
+     ========================================================= */
+  .gallery-section{
+    padding:3.6rem 0 4.2rem !important;
+    overflow:hidden !important;
+  }
+
+  .gallery-section .section-label{
+    margin-bottom:.75rem !important;
+    font-size:.68rem !important;
+    letter-spacing:.22em !important;
+  }
+
+  .gallery-section h2{
+    font-size:clamp(1.75rem,8vw,2.25rem) !important;
+    line-height:1.05 !important;
+    margin-bottom:1.8rem !important;
+    padding:0 12px !important;
+  }
+
+  .gallery-section .container{
+    width:100% !important;
+    max-width:none !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  .gallery-section .coverflow-wrapper{
+    width:100% !important;
+    height:350px !important;
+    min-height:350px !important;
+    margin:0 !important;
+    overflow:hidden !important;
+    position:relative !important;
+  }
+
+  .gallery-section .coverflow-track{
+    height:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:14px !important;
+    width:max-content !important;
+    will-change:transform !important;
+    transition:transform .45s cubic-bezier(.2,.75,.2,1) !important;
+  }
+
+  .gallery-section .coverflow-item{
+    flex:0 0 74vw !important;
+    width:74vw !important;
+    max-width:285px !important;
+    height:300px !important;
+    border-radius:20px !important;
+    overflow:hidden !important;
+    transform:scale(.88) !important;
+    opacity:.42 !important;
+    transition:transform .4s ease, opacity .4s ease, filter .4s ease !important;
+    box-shadow:0 18px 45px rgba(0,0,0,.35) !important;
+  }
+
+  .gallery-section .coverflow-item.active{
+    transform:scale(1) !important;
+    opacity:1 !important;
+    filter:none !important;
+    box-shadow:
+      0 24px 55px rgba(0,0,0,.48),
+      0 0 30px rgba(216,166,60,.08) !important;
+  }
+
+  .gallery-section .coverflow-item img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    display:block !important;
+  }
+
+  .gallery-section .coverflow-controls{
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    gap:14px !important;
+    margin-top:18px !important;
+  }
+
+  .gallery-section .coverflow-btn{
+    width:46px !important;
+    height:46px !important;
+    min-width:46px !important;
+    border:1px solid rgba(216,166,60,.4) !important;
+    border-radius:50% !important;
+    background:rgba(216,166,60,.05) !important;
+    color:#d8a63c !important;
+    display:grid !important;
+    place-items:center !important;
+    padding:0 !important;
+  }
+
+  .gallery-section .coverflow-btn:active{
+    background:#d8a63c !important;
+    color:#050505 !important;
+  }
+}
+
+@media (max-width:380px){
+  .site-header{padding:0 14px !important}
+  .site-header .brand-logo{width:42px !important;height:42px !important}
+  .site-header .brand-text h1{font-size:18px !important}
+  .site-header .brand-text span{font-size:8px !important}
+
+  .gallery-section .coverflow-wrapper{
+    height:330px !important;
+    min-height:330px !important;
+  }
+  .gallery-section .coverflow-item{
+    flex-basis:78vw !important;
+    width:78vw !important;
+    height:285px !important;
+  }
+}
+
+@media (min-width:901px){
+  .site-header .hamburger,
+  .mobile-nav{
+    display:none !important;
+  }
+}
+</style>
+
+
+<style id="hamburger-always-three-lines">
+@media (max-width:900px){
+  .site-header .hamburger,
+  .site-header .hamburger.active{
+    display:flex !important;
+  }
+
+  .site-header .hamburger span,
+  .site-header .hamburger.active span,
+  .site-header .hamburger.active span:nth-child(1),
+  .site-header .hamburger.active span:nth-child(2),
+  .site-header .hamburger.active span:nth-child(3){
+    transform:none !important;
+    opacity:1 !important;
+    visibility:visible !important;
+  }
+}
+</style>
+
+</head>
+<body class="bg-inner">
+  <div class="green-grid"></div>
+  <div class="custom-cursor"></div>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <div class="brand-logo"><img src="assets/logo.webp" alt="Stackly Music logo" class="stackly-gold-logo"></div>
+      <div class="brand-text"><h1>STACKLY</h1><span>Feel The Music</span></div>
+    </a>
+    <nav class="desktop-nav">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="service.html">Service</a>
+      <a href="blog.html">Blog</a><a href="instrument.html" class="active">Instrument</a><a href="contact.html">Contact</a>
+    </nav>
+    <a href="login.html" class="login-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Login
+    </a>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </header>
+  <nav class="mobile-nav">
+    <a href="index.html">Home</a><a href="about.html">About</a><a href="service.html">Service</a>
+    <a href="blog.html">Blog</a><a href="instrument.html">Instrument</a><a href="contact.html">Contact</a><a href="login.html">Login</a>
+  </nav>
+  <section class="instrument-hero">
+
+<div class="instrument-music" aria-hidden="true">
+  <svg viewBox="0 0 1440 760" preserveAspectRatio="none" width="100%" height="100%">
+    <g class="staff">
+      <path d="M-50 205 C250 170 430 250 720 210 S1180 150 1490 210"/>
+      <path d="M-50 218 C250 183 430 263 720 223 S1180 163 1490 223"/>
+      <path d="M-50 231 C250 196 430 276 720 236 S1180 176 1490 236"/>
+      <path d="M-50 244 C250 209 430 289 720 249 S1180 189 1490 249"/>
+      <path d="M-50 257 C250 222 430 302 720 262 S1180 202 1490 262"/>
+    </g>
+    <path class="wave" d="M-40 520 C80 470 130 570 250 520 S420 470 540 520 S710 570 830 520 S1000 470 1120 520 S1290 570 1480 520"/>
+    <path class="wave" d="M-40 540 C80 490 130 590 250 540 S420 490 540 540 S710 590 830 540 S1000 490 1120 540 S1290 590 1480 540"/>
+    <text x="11%" y="25%" class="note" font-size="64">♪</text>
+    <text x="83%" y="30%" class="note" font-size="78">♫</text>
+    <text x="18%" y="70%" class="note" font-size="52">♬</text>
+    <text x="76%" y="74%" class="note" font-size="60">♪</text>
+  </svg>
+</div>
+    <div class="container">
+      <div class="section-label" style="justify-content:center;">Collection</div>
+      <h1 class="reveal">The <span style="background:linear-gradient(135deg,var(--gold),var(--light-gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Collection</span></h1>
+      <p class="reveal reveal-delay-1">Find Your Perfect Instrument</p>
+    </div>
+  </section>
+  <section class="category-section">
+    <div class="container">
+      <div class="category-nav">
+        <button class="category-btn active" onclick="filterInstruments(\'all\', true)">All</button>
+        <button class="category-btn" onclick="filterInstruments(\'guitar\', true)">Guitar</button>
+        <button class="category-btn" onclick="filterInstruments(\'piano\', true)">Piano</button>
+        <button class="category-btn" onclick="filterInstruments(\'drums\', true)">Drums</button>
+        <button class="category-btn" onclick="filterInstruments(\'bass\', true)">Bass</button>
+        <button class="category-btn" onclick="filterInstruments(\'violin\', true)">Violin</button>
+        <button class="category-btn" onclick="filterInstruments(\'saxophone\', true)">Saxophone</button>
+      </div>
+    </div>
+  </section>
+  <section style="padding: 2rem 0;">
+    <div class="container">
+      <div class="instrument-grid" id="instrumentGrid">
+        <div class="instrument-card reveal" data-category="guitar">
+          <img src="assets/img.webp" alt="Electric Guitar" loading="lazy">
+          <div class="instrument-card-content">
+            <div class="instrument-card-tag">String</div>
+            <h3>Electric Guitar</h3>
+            <p>Precision-crafted with premium tonewoods and custom pickups.</p>
+            <div class="instrument-card-price">$2,499</div>
+          </div>
+        </div>
+        <div class="instrument-card reveal reveal-delay-1" data-category="piano">
+          <img src="assets/img2.webp" alt="Grand Piano" loading="lazy">
+          <div class="instrument-card-content">
+            <div class="instrument-card-tag">Keyboard</div>
+            <h3>Grand Piano</h3>
+            <p>Concert hall resonance with responsive touch and elegant form.</p>
+            <div class="instrument-card-price">$12,900</div>
+          </div>
+        </div>
+        <div class="instrument-card reveal reveal-delay-2" data-category="drums">
+          <img src="assets/img3.webp" alt="Drum Kit" loading="lazy">
+          <div class="instrument-card-content">
+            <div class="instrument-card-tag">Percussion</div>
+            <h3>Drum Kit</h3>
+            <p>Thunderous lows and crisp highs for the modern rhythm section.</p>
+            <div class="instrument-card-price">$3,299</div>
+          </div>
+        </div>
+        <div class="instrument-card reveal" data-category="bass">
+          <img src="assets/img4.webp" alt="Bass Guitar" loading="lazy">
+          <div class="instrument-card-content">
+            <div class="instrument-card-tag">String</div>
+            <h3>Bass Guitar</h3>
+            <p>Deep, resonant foundation that moves every audience.</p>
+            <div class="instrument-card-price">$2,199</div>
+          </div>
+        </div>
+        <div class="instrument-card reveal reveal-delay-1" data-category="violin">
+          <img src="assets/img5.webp" alt="Violin" loading="lazy">
+          <div class="instrument-card-content">
+            <div class="instrument-card-tag">Orchestral</div>
+            <h3>Violin</h3>
+            <p>Centuries of craftsmanship in every curve and tone.</p>
+            <div class="instrument-card-price">$4,799</div>
+          </div>
+        </div>
+        <div class="instrument-card reveal reveal-delay-2" data-category="saxophone">
+          <img src="assets/img6.webp" alt="Saxophone" loading="lazy">
+          <div class="instrument-card-content">
+            <div class="instrument-card-tag">Brass</div>
+            <h3>Saxophone</h3>
+            <p>Brass brilliance with soulful expression and jazz heritage.</p>
+            <div class="instrument-card-price">$3,899</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="featured-instrument">
+    <div class="container">
+      <div class="featured-grid">
+        <div class="featured-image reveal">
+          <img src="assets/img7.webp" alt="Featured" loading="lazy">
+        </div>
+        <div>
+          <div class="section-label reveal">Featured</div>
+          <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.8rem,3vw,2.5rem); margin-bottom:1.5rem;">The Maestro <span style="color:var(--gold);">Edition</span></h2>
+          <p class="reveal reveal-delay-2" style="color:rgba(245,242,234,0.6); line-height:1.8; margin-bottom:1.5rem;">
+            Our flagship electric guitar, hand-built by master luthier Antonio Rivera. Featuring a one-piece Honduran mahogany body, AAA flame maple top, and hand-wound custom pickups voiced for unparalleled clarity and warmth.
+          </p>
+          <ul style="color:rgba(245,242,234,0.5); margin-bottom:2rem; line-height:2;">
+            <li>Hand-selected tonewoods aged 20+ years</li>
+            <li>Brazilian rosewood fretboard with mother-of-pearl inlays</li>
+            <li>Custom-wound Alnico V pickups</li>
+            <li>Nitrocellulose lacquer finish in Vintage Burst</li>
+            <li>Certificate of authenticity and hardshell case</li>
+          </ul>
+          <a href="contact.html" class="btn-gold reveal reveal-delay-3">Inquire Now &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="comparison-section">
+    <div class="container">
+      <div class="section-label reveal" style="justify-content:center;">Compare</div>
+      <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.8rem,3vw,2.5rem); text-align:center; margin-bottom:3rem;">Choose Your <span style="color:var(--gold);">Level</span></h2>
+      <div class="comparison-grid">
+        <div class="comparison-card reveal">
+          <h3>Studio</h3>
+          <div class="price">$1,299</div>
+          <ul>
+            <li>Professional grade tonewoods</li>
+            <li>Standard hardware</li>
+            <li>1-year warranty</li>
+            <li>Gig bag included</li>
+          </ul>
+          <a href="contact.html" class="btn-outline" style="padding:0.8rem 1.5rem; font-size:0.75rem;">Select</a>
+        </div>
+        <div class="comparison-card reveal reveal-delay-1" style="border-color:rgba(216,166,60,0.25);">
+          <h3>Professional</h3>
+          <div class="price">$2,499</div>
+          <ul>
+            <li>Premium select tonewoods</li>
+            <li>Upgraded hardware & electronics</li>
+            <li>5-year warranty</li>
+            <li>Hardshell case included</li>
+          </ul>
+          <a href="contact.html" class="btn-gold" style="padding:0.8rem 1.5rem; font-size:0.75rem;">Select</a>
+        </div>
+        <div class="comparison-card reveal reveal-delay-2">
+          <h3>Maestro</h3>
+          <div class="price">$4,999</div>
+          <ul>
+            <li>Master grade tonewoods</li>
+            <li>Custom hand-wound pickups</li>
+            <li>Lifetime warranty</li>
+            <li>Custom flight case</li>
+          </ul>
+          <a href="contact.html" class="btn-outline" style="padding:0.8rem 1.5rem; font-size:0.75rem;">Select</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="gallery-section">
+    <div class="container">
+      <div class="section-label reveal" style="justify-content:center;">Gallery</div>
+      <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.8rem,3vw,2.5rem); text-align:center; margin-bottom:3rem;">Collection <span style="color:var(--gold);">Gallery</span></h2>
+      <div class="coverflow-wrapper" style="height:400px;">
+        <div class="coverflow-track" style="gap:1.5rem;">
+          <div class="coverflow-item" style="width:250px; height:320px;"><img src="assets/img4.webp" alt="Guitar" loading="lazy"></div>
+          <div class="coverflow-item" style="width:250px; height:320px;"><img src="assets/img7.webp" alt="Piano" loading="lazy"></div>
+          <div class="coverflow-item active" style="width:250px; height:320px;"><img src="assets/img10.webp" alt="Drums" loading="lazy"></div>
+          <div class="coverflow-item" style="width:250px; height:320px;"><img src="assets/img.webp" alt="Bass" loading="lazy"></div>
+          <div class="coverflow-item" style="width:250px; height:320px;"><img src="assets/img2.webp" alt="Violin" loading="lazy"></div>
+        </div>
+      </div>
+      <div class="coverflow-controls">
+        <button class="coverflow-btn" onclick="moveGallery(-1)" aria-label="Previous"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="coverflow-btn" onclick="moveGallery(1)" aria-label="Next"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </section>
+  <section class="particle-section">
+    <div class="container" style="position:relative; z-index:1;">
+      <h2 class="reveal" style="font-size:clamp(2rem,4vw,3rem); margin-bottom:1.5rem;">Begin Your <span style="color:var(--gold);">Journey</span></h2>
+      <p class="reveal reveal-delay-1" style="color:rgba(245,242,234,0.6); max-width:500px; margin:0 auto 2rem;">Every great performance starts with the right instrument. Let us help you find yours.</p>
+      <a href="contact.html" class="btn-gold reveal reveal-delay-2">Get In Touch &rarr;</a>
+    </div>
+  </section>
+  
+<footer class="site-footer reference-footer">
+  <div class="container reference-footer-container">
+    <button class="footer-top-button reference-top" type="button" aria-label="Back to top">↑</button>
+    <div class="reference-footer-grid">
+      <div class="reference-footer-brand">
+        <a href="index.html" class="brand reference-brand">
+          <div class="brand-logo"><img src="assets/logo.webp" alt="Stackly Music logo" class="stackly-gold-logo"></div>
+          <div class="brand-text"><h1>STACKLY</h1><span>Feel The Music</span></div>
+        </a>
+        <p>Premium musical instruments crafted for<br>musicians who demand character, precision<br>and unforgettable sound.</p>
+      </div>
+      <div class="reference-footer-column">
+        <h4>Information</h4>
+        <a href="index.html">Home</a><a href="about.html">About</a><a href="blog.html">Blog</a>
+        <a href="service.html">Service</a><a href="contact.html">Contact</a><a href="instrument.html">Instrument</a>
+      </div>
+      <div class="reference-footer-column">
+        <h4>Helpful Links</h4>
+        <a href="service.html">Services</a><a href="contact.html">Support</a>
+        <a href="404.html">Terms &amp; Condition</a><a href="404.html">Privacy Policy</a><a href="login.html">Account</a>
+      </div>
+      <div class="reference-footer-subscribe">
+        <h4>Subscribe More Info</h4>
+        <p>Get new instrument drops, music stories<br>and collection updates.</p>
+        <form action="404.html" method="get" class="reference-subscribe-form">
+          <input type="email" name="email" placeholder="Enter your Email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="reference-footer-divider"></div>
+    <div class="reference-footer-bottom">
+      <span class="reference-copy">&copy; 2026 STACKLY MUSIC. All rights reserved.</span>
+      <div class="reference-socials">
+        <a href="404.html" aria-label="Facebook">f</a>
+        <a href="404.html" aria-label="Google Plus">G+</a>
+        <a href="404.html" aria-label="Like">♥</a>
+        <a href="404.html" aria-label="Instagram">◎</a>
+      </div>
+      <span class="reference-crafted">Crafted for the love of sound.</span>
+    </div>
+  </div>
+</footer>
+  <script src="js/main.js"></script>
+  <script>
+    let galleryIndex = 2;
+    function moveGallery(dir) {
+      const items = document.querySelectorAll('.gallery-section .coverflow-item');
+      galleryIndex = Math.max(0, Math.min(items.length - 1, galleryIndex + dir));
+      items.forEach((item, i) => item.classList.toggle('active', i === galleryIndex));
+      const track = document.querySelector('.gallery-section .coverflow-track');
+      const gap = window.innerWidth <= 900 ? 14 : 24;
+      const offset = (track.parentElement.offsetWidth / 2) - (items[galleryIndex].offsetWidth / 2) - (galleryIndex * (items[0].offsetWidth + gap));
+      track.style.transform = `translateX(${offset}px)`;
+    }
+    function filterInstruments(cat) {
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(cat) || (cat === 'all' && b.textContent === 'All')));
+      document.querySelectorAll('.instrument-card').forEach(card => {
+        const match = cat === 'all' || card.dataset.category === cat;
+        card.style.display = match ? 'block' : 'none';
+        if (match) { setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50); }
+      });
+    }
+    document.querySelectorAll('.instrument-card').forEach((card, i) => {
+      card.style.transitionDelay = (i % 3 * 0.15) + 's';
+      const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.2 });
+      obs.observe(card);
+    });
+  </script>
+
+<script id="persistent-instrument-filter">
+(function(){
+  function categoryFromUrl(){
+    const value = new URLSearchParams(window.location.search).get('instrument');
+    return ['all','guitar','piano','drums','bass','violin','saxophone'].includes(value) ? value : 'all';
+  }
+
+  window.filterInstruments = function(cat, updateUrl = true){
+    const buttons = document.querySelectorAll('.category-btn');
+    const cards = document.querySelectorAll('.instrument-card');
+
+    buttons.forEach(function(btn){
+      btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === cat);
+    });
+
+    cards.forEach(function(card){
+      const match = cat === 'all' || card.dataset.category === cat;
+      card.style.display = match ? 'block' : 'none';
+      if(match){
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }
+    });
+
+    if(updateUrl){
+      const url = new URL(window.location.href);
+      if(cat === 'all') url.searchParams.delete('instrument');
+      else url.searchParams.set('instrument', cat);
+      history.pushState({instrument:cat}, '', url);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    filterInstruments(categoryFromUrl(), false);
+
+    document.querySelectorAll('.category-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const label = btn.textContent.trim().toLowerCase();
+        filterInstruments(label, true);
+      });
+    });
+  });
+
+  window.addEventListener('popstate', function(){
+    filterInstruments(categoryFromUrl(), false);
+  });
+})();
+</script>
+
+<script id="same-reference-footer-script">document.addEventListener("DOMContentLoaded",function(){const top=document.querySelector(".reference-top");if(top)top.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));});</script>
+</body>
+</html>
