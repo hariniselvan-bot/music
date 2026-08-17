@@ -135,33 +135,6 @@ animation:gridMove 25s linear infinite}
   }
 }
 </style>
-
-<style id="mobile-sidebar-scroll-lock">
-@media (max-width:800px){
-  html.menu-open,
-  body.menu-open{
-    overflow:hidden !important;
-    height:100% !important;
-    overscroll-behavior:none !important;
-    touch-action:none !important;
-  }
-
-  /* Keep the opened sidebar independent from the page behind it. */
-  .sidebar.open{
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    -webkit-overflow-scrolling:touch !important;
-    overscroll-behavior:contain !important;
-    touch-action:pan-y !important;
-  }
-
-  /* Prevent accidental background interaction while the overlay is active. */
-  .overlay.open{
-    touch-action:none !important;
-  }
-}
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -394,50 +367,21 @@ function render(){
     <div class="row"><div class="avatar">${initials(x.name)}</div><div class="row-main"><strong>${x.name} ${x.unread?'<span style="color:var(--gold)">•</span>':''}</strong><small>${x.text}</small></div><span class="badge">${x.time}</span></div>`).join("");
 }
 
-function setMobileMenu(open){
-  const sidebar=document.getElementById("sidebar");
-  const overlay=document.getElementById("overlay");
-
-  sidebar.classList.toggle("open",open);
-  overlay.classList.toggle("open",open);
-
-  // Lock the dashboard behind the hamburger menu.
-  document.documentElement.classList.toggle("menu-open",open);
-  document.body.classList.toggle("menu-open",open);
-
-  const menuBtn=document.getElementById("menuBtn");
-  if(menuBtn){
-    menuBtn.setAttribute("aria-expanded",String(open));
-    menuBtn.setAttribute("aria-label",open ? "Close menu" : "Open menu");
-  }
-}
-
 function openView(view){
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));
   document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
-
-  // Close menu and immediately restore page scrolling.
-  setMobileMenu(false);
-
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.addEventListener("click",()=>openView(btn.dataset.view));
-});
-
+document.querySelectorAll(".nav button").forEach(btn=>btn.addEventListener("click",()=>openView(btn.dataset.view)));
 document.getElementById("menuBtn").addEventListener("click",()=>{
-  const sidebar=document.getElementById("sidebar");
-  setMobileMenu(!sidebar.classList.contains("open"));
+  document.getElementById("sidebar").classList.add("open");
+  document.getElementById("overlay").classList.add("open");
 });
-
 document.getElementById("overlay").addEventListener("click",()=>{
-  setMobileMenu(false);
-});
-
-// Safety: restore normal scrolling if the viewport is switched back to desktop.
-window.addEventListener("resize",()=>{
-  if(window.innerWidth>800) setMobileMenu(false);
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
 });
 document.getElementById("logout").addEventListener("click",()=>{
   localStorage.removeItem("stacklyUserEmail");

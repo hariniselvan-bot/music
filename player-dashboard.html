@@ -69,34 +69,6 @@ animation:gridMove 25s linear infinite}
 }
 @media(max-width:540px){.cards{grid-template-columns:1fr}.topbar{gap:10px}.greeting h2{font-size:1.55rem}.card{padding:16px}.grid-3{grid-template-columns:1fr}.data-table th:nth-child(3),.data-table td:nth-child(3){display:none}}
 </style>
-
-<style id="dashboard-mobile-scroll-lock">
-@media (max-width:800px){
-  /* Lock ALL background/dashboard scrolling while sidebar is open */
-  html.dashboard-menu-open,
-  body.dashboard-menu-open{
-    overflow:hidden !important;
-    height:100% !important;
-    max-height:100% !important;
-    overscroll-behavior:none !important;
-    touch-action:none !important;
-  }
-
-  /* The sidebar itself remains usable if its contents exceed the screen */
-  .sidebar.open{
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    -webkit-overflow-scrolling:touch !important;
-    overscroll-behavior:contain !important;
-    touch-action:pan-y !important;
-  }
-
-  .overlay.open{
-    touch-action:none !important;
-  }
-}
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -271,50 +243,16 @@ function render(){
   document.getElementById("messageList").innerHTML=PLAYER_DATA.messages.map(x=>`
     <div class="row"><div class="avatar">${initials(x.name)}</div><div class="row-main"><strong>${x.name} ${x.unread?'<span style="color:var(--gold)">•</span>':''}</strong><small>${x.text}</small></div><span class="badge">${x.time}</span></div>`).join("");
 }
-function setDashboardMenu(open){
-  const sidebar=document.getElementById("sidebar");
-  const overlay=document.getElementById("overlay");
-  const menuBtn=document.getElementById("menuBtn");
-
-  sidebar.classList.toggle("open",open);
-  overlay.classList.toggle("open",open);
-
-  // Lock the dashboard behind the open mobile sidebar.
-  document.documentElement.classList.toggle("dashboard-menu-open",open);
-  document.body.classList.toggle("dashboard-menu-open",open);
-
-  if(menuBtn){
-    menuBtn.setAttribute("aria-expanded",String(open));
-    menuBtn.setAttribute("aria-label",open ? "Close menu" : "Open menu");
-  }
-}
-
 function openView(view){
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));
   document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
-
-  // Close sidebar and restore normal dashboard scrolling.
-  setDashboardMenu(false);
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.addEventListener("click",()=>openView(btn.dataset.view));
-});
-
-document.getElementById("menuBtn").addEventListener("click",()=>{
-  const sidebar=document.getElementById("sidebar");
-  setDashboardMenu(!sidebar.classList.contains("open"));
-});
-
-document.getElementById("overlay").addEventListener("click",()=>{
-  setDashboardMenu(false);
-});
-
-// If the viewport becomes desktop-sized, restore normal scrolling.
-window.addEventListener("resize",()=>{
-  if(window.innerWidth>800) setDashboardMenu(false);
-});
+document.querySelectorAll(".nav button").forEach(btn=>btn.addEventListener("click",()=>openView(btn.dataset.view)));
+document.getElementById("menuBtn").addEventListener("click",()=>{document.getElementById("sidebar").classList.add("open");document.getElementById("overlay").classList.add("open")});
+document.getElementById("overlay").addEventListener("click",()=>{document.getElementById("sidebar").classList.remove("open");document.getElementById("overlay").classList.remove("open")});
 document.getElementById("logout").addEventListener("click",()=>{
   localStorage.removeItem("stacklyUserEmail");
   localStorage.removeItem("stacklyUserName");

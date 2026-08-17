@@ -691,284 +691,6 @@ body.bg-inner::before{
 }
 </style>
 
-
-<style id="stackly-mobile-menu-final">
-/* =========================================================
-   STACKLY MOBILE HAMBURGER — MATCH REFERENCE
-   3 lines only / NEVER turns into X
-   ========================================================= */
-
-@media (max-width: 900px){
-
-  /* Header */
-  .site-header{
-    position:sticky !important;
-    top:0 !important;
-    z-index:10000 !important;
-    min-height:74px !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:space-between !important;
-    padding:10px 22px !important;
-    box-sizing:border-box !important;
-  }
-
-  .site-header .brand{
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-    min-width:0 !important;
-  }
-
-  .site-header .brand-logo{
-    width:42px !important;
-    height:42px !important;
-    min-width:42px !important;
-  }
-
-  .site-header .brand-text h1{
-    font-size:17px !important;
-    line-height:1 !important;
-    margin:0 !important;
-  }
-
-  .site-header .brand-text span{
-    display:block !important;
-    font-size:9px !important;
-    letter-spacing:.18em !important;
-    line-height:1.2 !important;
-  }
-
-  .site-header .desktop-nav,
-  .site-header .login-btn{
-    display:none !important;
-  }
-
-  /* The exact 3-line hamburger */
-  .site-header .hamburger{
-    appearance:none !important;
-    -webkit-appearance:none !important;
-    position:relative !important;
-    display:flex !important;
-    width:42px !important;
-    height:42px !important;
-    min-width:42px !important;
-    padding:0 !important;
-    margin:0 !important;
-    border:0 !important;
-    outline:0 !important;
-    border-radius:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    justify-content:center !important;
-    gap:5px !important;
-    cursor:pointer !important;
-    z-index:10002 !important;
-  }
-
-  .site-header .hamburger span,
-  .site-header .hamburger span:nth-child(1),
-  .site-header .hamburger span:nth-child(2),
-  .site-header .hamburger span:nth-child(3){
-    position:static !important;
-    display:block !important;
-    width:29px !important;
-    height:2px !important;
-    min-width:29px !important;
-    min-height:2px !important;
-    margin:0 !important;
-    padding:0 !important;
-    border:0 !important;
-    border-radius:0 !important;
-    background:#d8a63c !important;
-    opacity:1 !important;
-    transform:none !important;
-    rotate:none !important;
-    scale:1 !important;
-    translate:none !important;
-    transition:none !important;
-    box-shadow:none !important;
-  }
-
-  /* Open state: STILL THREE LINES, not X */
-  .site-header .hamburger:hover span,
-  .site-header .hamburger:focus span,
-  .site-header .hamburger:active span,
-  .site-header .hamburger.open span,
-  .site-header .hamburger.is-open span,
-  .site-header .hamburger.active span,
-  .site-header .hamburger[aria-expanded="true"] span{
-    width:29px !important;
-    height:2px !important;
-    opacity:1 !important;
-    transform:none !important;
-    rotate:none !important;
-    scale:1 !important;
-    translate:none !important;
-    background:#d8a63c !important;
-  }
-
-  /* Full mobile menu like the reference screenshot */
-  .site-header + .mobile-nav,
-  .mobile-nav{
-    position:fixed !important;
-    top:74px !important;
-    left:0 !important;
-    right:0 !important;
-    bottom:0 !important;
-    width:100% !important;
-    height:auto !important;
-    min-height:calc(100vh - 74px) !important;
-    margin:0 !important;
-    padding:58px 24px 70px !important;
-    box-sizing:border-box !important;
-    display:none !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    justify-content:flex-start !important;
-    gap:0 !important;
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    background:#05050b !important;
-    border:0 !important;
-    border-top:1px solid rgba(216,166,60,.08) !important;
-    box-shadow:none !important;
-    z-index:9999 !important;
-    isolation:isolate !important;
-  }
-
-  .site-header + .mobile-nav::before{
-    content:"" !important;
-    position:absolute !important;
-    inset:0 !important;
-    z-index:-1 !important;
-    pointer-events:none !important;
-    opacity:.10 !important;
-    background-image:
-      linear-gradient(rgba(216,166,60,.10) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(216,166,60,.10) 1px,transparent 1px) !important;
-    background-size:42px 42px !important;
-    mask-image:linear-gradient(to bottom,black,transparent 85%) !important;
-  }
-
-  .site-header + .mobile-nav.open,
-  .mobile-nav.open{
-    display:flex !important;
-  }
-
-  .mobile-nav a{
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    width:auto !important;
-    min-width:150px !important;
-    margin:0 !important;
-    padding:0 !important;
-    height:74px !important;
-    color:#f3eee6 !important;
-    background:transparent !important;
-    border:0 !important;
-    text-decoration:none !important;
-    font-family:"Playfair Display",serif !important;
-    font-size:27px !important;
-    font-weight:400 !important;
-    line-height:1 !important;
-    letter-spacing:-.02em !important;
-    text-align:center !important;
-    transition:color .2s ease !important;
-  }
-
-  .mobile-nav a:hover,
-  .mobile-nav a:focus{
-    color:#d8a63c !important;
-    background:transparent !important;
-  }
-
-  .mobile-nav a.active{
-    color:#d8a63c !important;
-  }
-
-  /* Login pill exactly as a separate final menu item */
-  .mobile-nav a[href="login.html"]{
-    min-width:106px !important;
-    width:106px !important;
-    height:70px !important;
-    margin-top:20px !important;
-    border:1px solid rgba(216,166,60,.65) !important;
-    border-radius:40px !important;
-    color:#d8a63c !important;
-    font-size:25px !important;
-    background:rgba(216,166,60,.015) !important;
-  }
-
-  .mobile-nav a[href="login.html"]:hover{
-    background:rgba(216,166,60,.08) !important;
-    color:#f2c45f !important;
-  }
-
-  /* Prevent accidental body horizontal scrolling */
-  body{
-    overflow-x:hidden !important;
-  }
-}
-
-@media (max-width:480px){
-  .site-header{
-    min-height:68px !important;
-    padding:9px 17px !important;
-  }
-
-  .site-header .brand-logo{
-    width:40px !important;
-    height:40px !important;
-    min-width:40px !important;
-  }
-
-  .site-header .brand-text h1{
-    font-size:16px !important;
-  }
-
-  .site-header .hamburger{
-    width:40px !important;
-    height:40px !important;
-    min-width:40px !important;
-  }
-
-  .site-header .hamburger span,
-  .site-header .hamburger span:nth-child(1),
-  .site-header .hamburger span:nth-child(2),
-  .site-header .hamburger span:nth-child(3),
-  .site-header .hamburger[aria-expanded="true"] span{
-    width:28px !important;
-  }
-
-  .site-header + .mobile-nav,
-  .mobile-nav{
-    top:68px !important;
-    min-height:calc(100vh - 68px) !important;
-    padding-top:42px !important;
-  }
-
-  .mobile-nav a{
-    height:74px !important;
-    font-size:26px !important;
-  }
-
-  .mobile-nav a[href="login.html"]{
-    margin-top:18px !important;
-  }
-}
-
-@media (min-width:901px){
-  .site-header .hamburger,
-  .mobile-nav{
-    display:none !important;
-  }
-}
-</style>
-
 </head>
 <body class="bg-inner">
   <div class="green-grid"></div>
@@ -1218,6 +940,26 @@ body.bg-inner::before{
       obs.observe(card);
     });
   </script>
+
+<script id="contact-header-menu">
+document.addEventListener('DOMContentLoaded', function(){
+  const header=document.querySelector('.site-header');
+  const button=header && header.querySelector('.hamburger');
+  const menu=document.querySelector('.mobile-nav');
+  if(!button || !menu) return;
+  button.addEventListener('click',function(){
+    const open=menu.classList.toggle('open');
+    button.setAttribute('aria-expanded',String(open));
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      menu.classList.remove('open');
+      button.setAttribute('aria-expanded','false');
+    });
+  });
+});
+</script>
+
 <script id="reference-footer-script">
 document.addEventListener('DOMContentLoaded', function () {
   const top = document.querySelector('.reference-top');
@@ -1225,65 +967,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
-</script>
-
-
-<script id="stackly-mobile-menu-final-script">
-(function(){
-  function initStacklyMobileMenu(){
-    const header = document.querySelector('.site-header');
-    const button = header ? header.querySelector('.hamburger') : null;
-    const menu = document.querySelector('.mobile-nav');
-
-    if (!button || !menu || button.dataset.stacklyMenuReady === 'true') return;
-
-    button.dataset.stacklyMenuReady = 'true';
-
-    function setMenu(open){
-      menu.classList.toggle('open', open);
-      button.setAttribute('aria-expanded', String(open));
-      button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-
-      /* Explicitly keep the hamburger as 3 lines */
-      button.classList.remove('open', 'is-open', 'active');
-      button.querySelectorAll('span').forEach(function(line){
-        line.style.transform = 'none';
-        line.style.opacity = '1';
-        line.style.rotate = 'none';
-        line.style.scale = '1';
-        line.style.translate = 'none';
-      });
-
-      document.body.classList.toggle('mobile-menu-open', open);
-    }
-
-    /* Capture phase prevents another header-menu listener from turning
-       the hamburger into an X or immediately toggling the menu closed. */
-    button.addEventListener('click', function(event){
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      setMenu(!menu.classList.contains('open'));
-    }, true);
-
-    menu.querySelectorAll('a').forEach(function(link){
-      link.addEventListener('click', function(){
-        setMenu(false);
-      });
-    });
-
-    window.addEventListener('resize', function(){
-      if (window.innerWidth > 900) setMenu(false);
-    });
-
-    setMenu(false);
-  }
-
-  if (document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', initStacklyMobileMenu);
-  } else {
-    initStacklyMobileMenu();
-  }
-})();
 </script>
 
 </body>
